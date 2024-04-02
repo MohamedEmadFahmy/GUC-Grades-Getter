@@ -1,31 +1,41 @@
+import os
 import requests
 from requests_ntlm import HttpNtlmAuth
 from bs4 import BeautifulSoup
-import time
 import concurrent.futures
 from dotenv import load_dotenv
-import os
+import time
 
-def process_option(option, gradesURL, authentication, fields, i):
+def fetchCourseTable(option, gradesURL, authentication, fields):
     option_value = option['value']
     fields['ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$smCrsLst'] = option_value
         
-    response = requests.post(gradesURL, data=fields, auth=authentication)
+    # response = requests.post(gradesURL, data=fields, auth=authentication)
+
+    # Construct the path to the HTML file
+    file_path = os.path.join(os.getcwd(), 'pages', 'gradepage1.html')
+
+    # Check if the file exists
+    if os.path.exists(file_path):
+        # Open and read the file
+        with open(file_path, 'r', encoding='utf-8') as file:
+            response = file.read()
+
+        soup = BeautifulSoup(response, 'html.parser')
+
+        # Find the table within the div
+        table = soup.select('#ContentPlaceHolderright_ContentPlaceHoldercontent_nttTr table')
+
+        if len(table) == 0:
+            return None
+
+        return table[0]
     
-    with open(f"gradepage{i}.html", "w") as file:
-        file.write(response.text)
-        print(option.text)
-
-
+    return None
 
 def fetchGrades(username, password):
-
-
     gradesURL = "https://apps.guc.edu.eg/student_ext/Grade/CheckGrade_01.aspx"
-
     dropDownListId = "ContentPlaceHolderright_ContentPlaceHoldercontent_smCrsLst"
-
-
     authentication = HttpNtlmAuth(username, password)
 
     response = requests.get(gradesURL, auth=authentication)
@@ -53,12 +63,34 @@ def fetchGrades(username, password):
         for i, option in enumerate(options):
             if i == 0:
                 continue
-            futures.append(executor.submit(process_option, option, gradesURL, authentication, fields, i))
+            futures.append(executor.submit(fetchCourseTable, option, gradesURL, authentication, fields))
         
         for future in concurrent.futures.as_completed(futures):
-            pass  # You can handle any cleanup or result processing here if needed
+            # You can handle any cleanup or result processing here if needed
+            table = future.result()
+            parseTable(table)
+
+def parseTable(table):
+    if table is None:
+        return []
+
+    ''' Extract Data from html table of grades '''
+    datasets = []
+    for row in table.find_all("tr")[1:]:
+        element = []
+        for item in row.find_all('td'):
+            element.append(item.text.strip())
+        datasets.append(element)
+
+    # Fix grades format
+    for element in datasets:
+        grades = element[2].split()
+        element[2] = ''.join(grades)
 
 
+    print(datasets)
+    print()
+    # print("\n\n\n")
 
 load_dotenv()
 username = os.getenv("guc_username")
@@ -66,9 +98,6 @@ password = os.getenv("guc_password")
 
 start_time = time.time()
 fetchGrades(username, password)
-
 end_time = time.time()
 elapsed_time = end_time - start_time
 print("Elapsed time: {:.6f} seconds".format(elapsed_time))
-        
-
