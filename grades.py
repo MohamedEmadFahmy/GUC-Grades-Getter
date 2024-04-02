@@ -6,14 +6,14 @@ import concurrent.futures
 from dotenv import load_dotenv
 import time
 
-def fetchCourseTable(option, gradesURL, authentication, fields):
+def fetchCourseTable(option, gradesURL, authentication, fields, i):
     option_value = option['value']
     fields['ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$smCrsLst'] = option_value
         
     # response = requests.post(gradesURL, data=fields, auth=authentication)
 
     # Construct the path to the HTML file
-    file_path = os.path.join(os.getcwd(), 'pages', 'gradepage1.html')
+    file_path = os.path.join(os.getcwd(), 'pages', f'gradepage{i}.html')
 
     # Check if the file exists
     if os.path.exists(file_path):
@@ -38,8 +38,18 @@ def fetchGrades(username, password):
     dropDownListId = "ContentPlaceHolderright_ContentPlaceHoldercontent_smCrsLst"
     authentication = HttpNtlmAuth(username, password)
 
-    response = requests.get(gradesURL, auth=authentication)
-    soup = BeautifulSoup(response.text, 'html.parser')
+    file_path = os.path.join(os.getcwd(), 'pages', 'gradepage1.html')
+
+    # Check if the file exists
+    if os.path.exists(file_path):
+        # Open and read the file
+        with open(file_path, 'r', encoding='utf-8') as file:
+            response = file.read()
+
+        soup = BeautifulSoup(response, 'html.parser')
+
+    # response = requests.get(gradesURL, auth=authentication)
+    # soup = BeautifulSoup(response.text, 'html.parser')
 
     fields = {
         "__EVENTTARGET": "",
@@ -54,8 +64,11 @@ def fetchGrades(username, password):
         "hiddenFieldEvalMethIdValue": soup.find('input', {'id': 'ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$rptrNtt$ctl02$evalMethId'})['value'] if soup.find('input', {'id': 'ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$rptrNtt$ctl02$evalMethId'}) else ''
     }
 
+
     dropdown = soup.find('select', {'id': f'{dropDownListId}'})
     options = dropdown.find_all('option')
+
+
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         futures = []
@@ -63,7 +76,7 @@ def fetchGrades(username, password):
         for i, option in enumerate(options):
             if i == 0:
                 continue
-            futures.append(executor.submit(fetchCourseTable, option, gradesURL, authentication, fields))
+            futures.append(executor.submit(fetchCourseTable, option, gradesURL, authentication, fields, i))
         
         for future in concurrent.futures.as_completed(futures):
             # You can handle any cleanup or result processing here if needed
@@ -72,6 +85,7 @@ def fetchGrades(username, password):
 
 def parseTable(table):
     if table is None:
+        print("Table is None")
         return []
 
     ''' Extract Data from html table of grades '''
