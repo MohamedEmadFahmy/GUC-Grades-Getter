@@ -1,0 +1,1079 @@
+
+
+<!DOCTYPE html>
+
+<html>
+<head><title>
+	Student Portal SIS
+</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta http-equiv="Content-Language" content="en" /><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" /><meta name="description" content="This is an example dashboard created using build-in elements and components." /><meta name="msapplication-tap-highlight" content="no" /><link href="/CSS/architectui-html-pro-1.4.0/main.87c0748b313a1dda75f5.css" rel="stylesheet" />
+   
+
+    <style>
+        .app-header__logo .logo-src {
+            background: url(/CSS/architectui-html-pro-1.4.0/assets/images/guc_logo_og.png);
+            background-repeat: no-repeat;
+            width: 118px;
+            height: 50px;
+        }
+
+        .app-sidebar {
+            background-image: linear-gradient(to right,    	 #00665c,  	 #00665c ) !important;
+        }
+
+        .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after{
+            background-color: #00665c !important;
+        }
+
+        .main-menu {
+            color: rgba(255,255,255,0.7) !important;
+        }
+
+            .main-menu:hover {
+                background: rgba(255,255,255,0.15) !important;
+                color: #fff !important;
+            }
+
+        .vertical-nav-menu ul > li > a.mm-active {
+            color: #fff;
+            background: rgba(255,255,255,0.15);
+            font-weight: normal;
+        }
+
+        .vertical-nav-menu ul > li > a:hover {
+            background: rgba(255,255,255,0.15) !important;
+            color: #fff !important;
+        }
+    </style>
+    <style>
+        .datepicker-container.datepicker-dropdown.datepicker-top-left {
+            z-index: 1500 !important;
+        }
+    </style>
+    <style>
+        .modalx {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba( 255, 255, 255, .7 )
+            /*url('http://i.stack.imgur.com/FhHRx.gif')*/
+            50% 50% no-repeat;
+        }
+
+        /* When the body has the loading class, we turn
+               the scrollbar off with overflow:hidden */
+        body.loading .modalx {
+            overflow: hidden;
+        }
+
+        /* Anytime the body has the loading class, our
+               modal element will be visible */
+        body.loading .modalx {
+            display: block;
+        }
+    </style>
+    <style>
+        .app-header__content {
+            height: 90px !important;
+        }
+          .vertical-nav-menu ul > li > a {
+                color: white !important;
+            }
+    </style>
+    
+    
+    
+
+    <style>
+        .icon_application-form {
+                background-image: url('/CSS/Icons/icons8-list-30.png');
+                height: 30px !important;
+                width: 30px !important;
+                display: block;
+                    background-repeat: no-repeat;
+                /* Other styles here */
+            }
+         .icon_double-down {
+                background: url('/CSS/Icons/icons8-collapse-arrow-35.png');
+                /*height: 25px !important;
+                width: 25px !important;*/
+                display: block;
+                background-repeat: no-repeat;
+                opacity:0.7;
+                /* Other styles here */
+            }
+
+          .icon_terms-and-conditions {
+                background: url('/CSS/Icons/terms-and-conditions.png');
+                height: 40px;
+                width: 40px;
+                display: block;
+                background-repeat: no-repeat;
+                opacity:0.7;
+                /* Other styles here */
+            }
+
+          .vertical-nav-menu i.metismenu-state-icon{
+                  height: 50%;
+          }
+
+    </style>
+</head>
+<body>
+    <form method="post" action="./CheckGrade_01.aspx" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="810D5553" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="2WRP5j2XrVdcrMifFEglxYUCXgNOsPHM1mdRktdLADodxqydeLFs5MQLxZNArb1MpmWBh/JtUze69r9fBbJvmOjJNDF2ht8k0aXiXLGCdhOACfoYW433IkldoGS+8KdQaphykKbioEw/9uQ3dftR7B28NiOubvXowhzBBoKke0tZrNvIVMYcpYm1QPVJagY1TpYDGo8x6i/HGbTxJsBnD7h2V63Gee8Pj3XywXk0wlwdqybhK35kgq0/87v8xvywyuWCkTdrgnOKPLlRU9LupAZspDwyRO7LvjQbnO8kng00ji0atr0DE3csoA6IcDs40thngL6ZNVsDj/leonS471R0qW7c5jV2x+mgCgsAk/4=" />
+        <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+            <div class="app-header header-shadow d-print-none ">
+                <div class="app-header__logo">
+                    <div class="logo-src"></div>
+                    <div class="header__pane ml-auto">
+                        <div>
+                            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
+                                <span class="hamburger-box">
+                                    <span class="hamburger-inner"></span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-header__mobile-menu">
+                    <div>
+                        <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+                            <span class="hamburger-box">
+                                <span class="hamburger-inner"></span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="app-header__menu">
+                    <span>
+                        <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+                            <span class="btn-icon-wrapper">
+                                <i class="fa fa-ellipsis-v fa-w-6"></i>
+                            </span>
+                        </button>
+                    </span>
+                </div>
+                <div class="app-header__content">
+                    <div class="app-header-left text-center timeline-title">
+                        <h4>Student Portal - SIS</h4>
+
+                    </div>
+                    <div class="app-header-right">
+                        <div class="header-dots">
+                        </div>
+
+
+                        
+
+    <div class="widget-content-right ml-3 header-user-info ">
+        <h5><span id="ContentPlaceHolderperson_LabelPageInactive"><font color="Red"></font></span></h5>
+    </div>
+    <div class="header-btn-lg pr-0">
+        <div class="widget-content p-0">
+            <div class="widget-content-wrapper">
+                <div class="widget-content-left">
+                    <div class="btn-group">
+                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">Hello,
+                            <span>GUC\mohamed.emad</span>
+                            <a id="ContentPlaceHolderperson_LinkButtonactor" href="javascript:__doPostBack(&#39;ctl00$ctl00$ContentPlaceHolderperson$LinkButtonactor&#39;,&#39;&#39;)"></a>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-content-left  ml-3 header-user-info">
+                    <div class="widget-heading">
+                        <img width="42" class="rounded-circle" src="/CSS/architectui-html-pro-1.4.0/assets/images/images.png" alt="">
+                    </div>
+                    <div class="widget-subheading">
+                    </div>
+                </div>
+                <div class="widget-content-right header-user-info ml-3">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+                        <div class="header-btn-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="app-main">
+                <div class="app-sidebar sidebar-shadow">
+                    <div class="app-header__logo">
+                        <div class="logo-src">
+                        </div>
+                        <div class="header__pane ml-auto">
+                            <div>
+                                <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
+                                    <span class="hamburger-box">
+                                        <span class="hamburger-inner"></span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="app-header__mobile-menu">
+                        <div>
+                            <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+                                <span class="hamburger-box">
+                                    <span class="hamburger-inner"></span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="app-header__menu">
+                        <span>
+                            <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+                                <span class="btn-icon-wrapper">
+                                    <i class="fa fa-ellipsis-v fa-w-6"></i>
+                                </span>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="scrollbar-sidebar" style="overflow-y: scroll !important; overflow-x:hidden !important;">
+                        <div class="app-sidebar__inner">
+                            
+    <div class="p-3">
+        <input type="text" id="search-input" placeholder="Menu Search..." class="form-control">
+    </div>
+    
+    <ul class="vertical-nav-menu" id="menu">
+        <li class="app-sidebar__heading"></li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Main
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/index.aspx" >
+                            
+                            DashBoard
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Main/Notifications.aspx" >
+                            
+                            Your Notification
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Main/StudentFeedback.aspx" >
+                            
+                            System FeedBack
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/UserProfile/UserProfileSearch.aspx" >
+                            
+                            Search for staff
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Attendance
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/Attendance/ClassAttendance_ViewStudentAttendance_001.aspx" >
+                            
+                            View Attendance
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Berlin
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/Berlin/Default.aspx" >
+                            
+                            Study Abroad
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Course
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/CourseWork/Upload_001.aspx" >
+                            
+                            Upload Course Work
+
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Evaluation
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/Evaluation/EvaluateCourse.aspx" >
+                            
+                            Evaluate Course
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Evaluation/EvaluateStaff.aspx" >
+                            
+                            Evaluate Staff
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Exam
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/Exam/ExamExcuseFinal.aspx" >
+                            
+                            Final Exam Excuse 
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Exam/MakeupRegistration.aspx" >
+                            
+                            Makeup Registration
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Exam/ViewExamSeat_01.aspx" >
+                            
+                            Exam Seats
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Financial
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/Financial/BalanceView_001.aspx" >
+                            
+                            Financial Balance
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Grade
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/Grade/CheckGrade_01.aspx" >
+                            
+                            Check Grades
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Grade/CheckGradePerviousSemester_01.aspx" >
+                            
+                            Check Previous Grades
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Grade/Transcript_001.aspx" >
+                            
+                            Transcript
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Registration
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/Registration/CourseRegistrationView_001.aspx" >
+                            
+                            Registered Courses 
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Registration/ElectiveNavigation.aspx" >
+                            
+                            Declare Elective/Seminar/Track
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Registration/ExtraCourseReg.aspx" >
+                            
+                            Placement Test Registration
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Registration/MajorNavigation.aspx" >
+                            
+                            Declare Faculty/Major
+
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Registration/SummerLanguageCoursesRegistration_001.aspx" >
+                            
+                            Summer Language
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Reservation
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/Reservations/Bus/Reservation.aspx" >
+                            
+                            Bus Reservation
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Reservations/Session/SessionReservation_001.aspx" >
+                            
+                            Session Reservation
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Reservations/TripReservation_01.aspx" >
+                            
+                            Trip Reservation
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Scheduling
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/Scheduling/ChangeGroupRequest.aspx" >
+                            
+                            Change Group
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Scheduling/GeneralGroupSchedule.aspx" >
+                            
+                            General Group Schedule
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Scheduling/GroupSchedule.aspx" >
+                            
+                            Your Schedule
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Scheduling/SearchAcademicScheduled_001.aspx" >
+                            
+                            Academic Schedule
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+             <li >
+                <a href="#" class="main-menu ">
+                   
+                    <i class="metismenu-icon icon_application-form"></i>
+                    Thesis
+                    <i class="metismenu-state-icon caret-left icon_double-down"></i>
+                    
+                    
+                </a>
+             <ul>
+
+            
+                     
+                        <li>
+                            <a href="/student_ext/Thesis/Internship.aspx" >
+                            
+                            Internship
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Thesis/ThesisNavigation.aspx" >
+                            
+                            Select Thesis
+                            </a>
+                        </li>
+                    
+                
+                     
+                        <li>
+                            <a href="/student_ext/Thesis/UploadThesisTopicFile_01.aspx" >
+                            
+                            Upload Thesis Topic File
+                            </a>
+                        </li>
+                    
+                
+                  </ul>
+                  </li>
+        
+
+    </ul>
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="app-main__outer">
+                    <div class="app-main__inner">
+                        <div class="">  
+                            <div class="">
+                                <div class="">
+                                </div>
+                                <div class="">
+
+                                    
+    <div class="app-inner-layout__header bg-heavy-rain">
+                            <div class="app-page-title">
+                                <div class="page-title-wrapper">
+                                    <div class="page-title-heading p-2">
+                                        <div class="page-title-icon ">
+                                            <i class="icon_terms-and-conditions"></i>
+                                        </div>
+                                        <div>
+                                            <span id="ContentPlaceHolderright_LabelPageName" class="h5">Check Grades</span>
+                                            <br />
+                                              <span id="ContentPlaceHolderright_Labelmasterpagemessage" style="font-size:16px;color:red;"></span>
+                                            <div class="page-title-subheading">
+                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="page-title-actions d-print-none">
+                                       <div class="p-2">
+                                           <a href="https://apps.guc.edu.eg/www/BRM/UserEntries.aspx" data-toggle="tooltip" title="" data-placement="bottom" class="btn-shadow mr-3 btn btn-dark" data-original-title="Please contribute with us to enhance your experience">
+                                                <i class="fa fa-stack fa-star"></i>
+                                            </a>
+                                       </div>
+                                        
+                                    </div>    </div>
+                            </div>                </div>
+   
+
+    
+
+
+
+    <div class="row">
+        <div class="col-12">
+
+
+            <div class="row">
+                <div class=" offset-lg-3 offset-xl-3 col-xl-6  col-lg-6 col-md-12 col-sm-12">
+
+                    <div class="main-card mb-3 card text-left">
+                                        <div class="card-header">Choose Course:</div>
+                                        <div class="card-body">
+                                           <P align="center"><span id="ContentPlaceHolderright_ContentPlaceHoldercontent_stdNmLbl"><b>55-4156 Mohamed Emad Ahmed Fahmy Mohamed Hussein</b></span></P>
+											<p align="left">Course:
+												<select name="ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$smCrsLst" id="ContentPlaceHolderright_ContentPlaceHoldercontent_smCrsLst" class="form-control">
+	<option value="">Choose a Course</option>
+	<option value="258">MET Computer Science 6th Semester - CSEN601 Computer System Architecture</option>
+	<option value="259">MET Computer Science 6th Semester - CSEN602 Operating Systems</option>
+	<option value="260">MET Computer Science 6th Semester - MNGT601 Introduction to Management</option>
+	<option value="523">MET Computer Science 6th Semester - DMET602 Network &amp; Media lab</option>
+	<option selected="selected" value="561">MET Computer Science 6th Semester - CSEN604 Data Bases II</option>
+	<option value="563">MET Computer Science 6th Semester - CSEN603 Software Engineering</option>
+
+</select></p>
+
+                                          
+
+                                        </div>                                        
+                                            <div class="d-block text-right card-footer">                                            
+                                        </div>
+                                    </div>                  
+
+
+                </div>
+
+				
+
+				</div>
+
+
+			  <div id="ContentPlaceHolderright_ContentPlaceHoldercontent_nttTr" class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+					    <div class="main-card mb-3 card text-left">
+                                        <div class="card-header">Quiz/Assignment:</div>
+                                        <div class="card-body">
+											
+													<TABLE class="table table-bordered">
+														<TR>
+															<TD><STRONG>Quiz/Assignment</STRONG></TD>
+															<td><strong>Element Name</strong></td>
+															<TD><STRONG>Grade</STRONG></TD>
+															<td><strong>Prof./Lecturer/TA</strong></td>
+														</TR>
+												
+													<tr id="ContentPlaceHolderright_ContentPlaceHoldercontent_rptrNtt_stdRw_0">
+	<TD>
+															<span id="ContentPlaceHolderright_ContentPlaceHoldercontent_rptrNtt_evalMethLbl_0">Quiz1</span><input name="ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$rptrNtt$ctl01$evalMethId" type="hidden" id="ContentPlaceHolderright_ContentPlaceHoldercontent_rptrNtt_evalMethId_0" value="367095" /></TD>
+	<td>
+															Quiz-Score
+														</td>
+	<TD>
+															13.5
+															/
+															20
+														</TD>
+	<td>
+															Mahinar Mohamed Ahmed Reda Mohamed
+														</td>
+</tr>
+
+												
+							</TABLE>
+							
+
+                                          
+
+                                        </div>                                        
+                                            <div class="d-block text-right card-footer">                                            
+                                        </div>
+                                    </div>    
+
+					</div>
+				  </div>
+
+
+
+			<br />
+
+			  <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                    <div class="main-card mb-3 card text-left">
+                                        <div class="card-header">Mid-Term Results:</div>
+                                        <div class="card-body">
+											<table class="table table-bordered" cellspacing="0" rules="all" border="1" id="ContentPlaceHolderright_ContentPlaceHoldercontent_midDg">
+	<tr>
+		<td><font color="Black">Course</font></td><td><font color="Black">Percentage</font></td>
+	</tr><tr>
+		<td><font color="Black">MET Computer Science 6th Semester - Introduction to Management MNGT601</font></td><td><font color="Black"><b>85</b></font></td>
+	</tr>
+</table>
+											<br />
+											<br />
+											<span id="ContentPlaceHolderright_ContentPlaceHoldercontent_countLbl">1</span>
+
+                                        </div>                                        
+                                            <div class="d-block text-right card-footer">                                            
+                                        </div>
+                                    </div>                  
+
+					<input type="hidden" name="ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$HiddenFieldstudent" id="ContentPlaceHolderright_ContentPlaceHoldercontent_HiddenFieldstudent" value="38693" />
+					<input type="hidden" name="ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$HiddenFieldseason" id="ContentPlaceHolderright_ContentPlaceHoldercontent_HiddenFieldseason" value="62" />
+						 </div>
+				  </div>
+
+
+
+
+			</div>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+    <br /><br /><br /><br /><br /><br /><br /><br />
+    
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+        <div class="app-drawer-wrapper">
+            <div class="drawer-nav-btn">
+                <button type="button" class="hamburger hamburger--elastic is-active">
+                    <span class="hamburger-box"><span class="hamburger-inner"></span></span>
+                </button>
+            </div>
+            <div class="drawer-content-wrapper">
+                <div class="scrollbar-container">
+                    
+    <h3 class="drawer-heading">ShortCuts</h3>
+    <div class="drawer-section">
+        <div class="row">
+        </div>
+        <div class="divider"></div>
+
+    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        
+
+    
+
+
+
+        
+
+        <input type="hidden" name="ctl00$ctl00$div_position" id="div_position" value="0" />
+    </form>
+
+    <script type="text/javascript" src="/CSS/architectui-html-pro-1.4.0/main.87c0748b313a1dda75f5.js"></script>
+    <script src="/CSS/architectui-html-pro-1.4.0/jqueryV3.6.3.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var x = $(location).attr('search');
+            $('li.mm-active').closest('a.mm-active').removeClass('mm-active');
+            $('li.mm-active').removeClass('mm-active');
+            $('a[href="' + location.pathname + x + '"]').closest('li').addClass('mm-active');
+            $('a[href="' + location.pathname + x + '"]').addClass('mm-active');
+        });
+    </script>
+
+    <script>
+        $('.app-container').addClass('closed-sidebar');
+        //maintain postion scroll
+        $(document).ready(function () {
+            var div_position = $("#div_position");
+            if (div_position.val() != 0) {
+                $(window).scrollTop(div_position.val());
+            }
+            $(window).scroll(function () {
+                div_position.val($(window).scrollTop());
+            });
+        });
+
+
+        //hide fields from table
+        $(document).ready(function () {
+            $(".modal").each(function () {
+                $(this).attr("data-backdrop", "static");
+                $(this).attr("data-keyboard", "false");
+            });
+            $(".table").each(function () {
+                var ownerIndex = $(this).find('th:contains("ID")').index() + 1;
+                $(this).find('td:nth-child(' + ownerIndex + ')').hide();
+                $(this).find("tbody tr, thead tr").children(":nth-child(" + ownerIndex + ")").hide()
+
+                var ownerIndex2 = $(this).find('th:contains("URL")').index() + 1;
+                $(this).find('td:nth-child(' + ownerIndex2 + ')').hide();
+                $(this).find("tbody tr, thead tr").children(":nth-child(" + ownerIndex2 + ")").hide()
+
+                var ownerIndex3 = $(this).find('th:contains("SeasonId")').index() + 1;
+                $(this).find('td:nth-child(' + ownerIndex3 + ')').hide();
+                $(this).find("tbody tr, thead tr").children(":nth-child(" + ownerIndex3 + ")").hide()
+
+            });
+
+            $(".table").each(function () {
+                var newul = $(this).parent().attr("Style", "overflow-x: auto; ")
+            });
+
+            $(".dropdown-menu-header").click(function () {
+
+                $(this).next(".card-body").toggle("slow");
+
+
+            });
+            $('.app-container').addClass('closed-sidebar');
+
+        });
+    </script>
+
+
+    
+
+    
+
+
+    <script>
+        $(document).ready(function () {
+            var expanded = false;
+            var menu = $('#menu').html();
+
+            $('#search-input').on('input', function () {
+                var searchQuery = $(this).val();
+                searchMenu(searchQuery);
+                if (expanded == false) {
+                    $('#menu li').each(function () {
+                        if (!$(this).eq(0).hasClass('mm-active')) {
+                            $(this).find('a').attr("aria-expanded", "true");
+                            $(this).find('ul').addClass("mm-show");
+                        }
+                    });
+                    expanded = true;
+                }
+                if (searchQuery == "" && expanded == true) {
+                    $('#menu li').each(function () {
+                        if (!$(this).eq(0).hasClass('mm-active')) {
+                            $(this).find('a').attr("aria-expanded", "false");
+                            $(this).find('ul').removeClass("mm-show");
+                        }
+                        expanded = false;
+                    });
+                }
+            });
+        });      
+       
+
+        function searchMenu(query) {
+           
+            // Loop through all menu items
+            $('#menu li').each(function () {
+               
+                // Get the text content of the menu item
+                var text = $(this).text().toLowerCase();
+               
+                // If the text content contains the search query, show the menu item
+                if (text.indexOf(query.toLowerCase()) >= 0) {
+                    
+                    $(this).show();
+                } else {
+                    
+                    $(this).hide();
+                }
+            });
+        }
+
+    </script>
+
+
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            $(document).on("keydown", disableF5);
+        });
+        function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
+    </script>
+</body>
+</html>
