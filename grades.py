@@ -1,5 +1,5 @@
 import os
-import requests
+# import requests
 from requests_ntlm import HttpNtlmAuth
 from bs4 import BeautifulSoup
 import concurrent.futures
