@@ -4,7 +4,13 @@ from requests_ntlm import HttpNtlmAuth
 from bs4 import BeautifulSoup
 import concurrent.futures
 from dotenv import load_dotenv
-import time
+from rich.console import Console
+from rich.progress import Progress
+
+from time import sleep
+
+console = Console()
+
 
 def fetchCourseTable(option, gradesURL, authentication, fields, i):
     option_value = option['value']
@@ -48,9 +54,6 @@ def fetchGrades(username, password):
 
         soup = BeautifulSoup(response, 'html.parser')
 
-    # response = requests.get(gradesURL, auth=authentication)
-    # soup = BeautifulSoup(response.text, 'html.parser')
-
     fields = {
         "__EVENTTARGET": "",
         "__EVENTARGUMENT": "",
@@ -64,24 +67,29 @@ def fetchGrades(username, password):
         "hiddenFieldEvalMethIdValue": soup.find('input', {'id': 'ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$rptrNtt$ctl02$evalMethId'})['value'] if soup.find('input', {'id': 'ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$rptrNtt$ctl02$evalMethId'}) else ''
     }
 
-
     dropdown = soup.find('select', {'id': f'{dropDownListId}'})
     options = dropdown.find_all('option')
 
-
+   
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         futures = []
-
-        for i, option in enumerate(options):
-            if i == 0:
-                continue
-            futures.append(executor.submit(fetchCourseTable, option, gradesURL, authentication, fields, i))
         
-        for future in concurrent.futures.as_completed(futures):
-            # You can handle any cleanup or result processing here if needed
-            table = future.result()
-            parseTable(table)
+        with Progress() as progress:
+            task = progress.add_task("[bold green]Fetching grades...", total=len(options) - 1)
+
+            for i, option in enumerate(options):
+                if i == 0:
+                    continue
+                futures.append(executor.submit(fetchCourseTable, option, gradesURL, authentication, fields, i))
+            
+            for future in concurrent.futures.as_completed(futures):
+                # You can handle any cleanup or result processing here if needed
+                table = future.result()
+                parseTable(table)
+                progress.update(task, advance=1)
+                sleep(0.5)
+                
 
 def parseTable(table):
     if table is None:
@@ -103,15 +111,18 @@ def parseTable(table):
 
 
     print(datasets)
-    print()
+    # print()
     # print("\n\n\n")
 
 load_dotenv()
 username = os.getenv("guc_username")
 password = os.getenv("guc_password")
 
-start_time = time.time()
+# start_time = time.time()
+# end_time = time.time()
+# elapsed_time = end_time - start_time
+# print("Elapsed time: {:.6f} seconds".format(elapsed_time))
+
 fetchGrades(username, password)
-end_time = time.time()
-elapsed_time = end_time - start_time
-print("Elapsed time: {:.6f} seconds".format(elapsed_time))
+
+console.log("Hi there!")
