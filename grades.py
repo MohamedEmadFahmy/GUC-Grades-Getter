@@ -6,17 +6,17 @@ import concurrent.futures
 from dotenv import load_dotenv
 from rich.console import Console
 from rich.progress import Progress
-
 from time import sleep
+
 
 console = Console()
 
+allGrades = []
 
-def fetchCourseTable(option, gradesURL, authentication, fields, i):
+
+def fetchCourseTable(option,courseName, gradesURL, authentication, fields, i):
     option_value = option['value']
     fields['ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$smCrsLst'] = option_value
-        
-    # response = requests.post(gradesURL, data=fields, auth=authentication)
 
     # Construct the path to the HTML file
     file_path = os.path.join(os.getcwd(), 'pages', f'gradepage{i}.html')
@@ -35,9 +35,20 @@ def fetchCourseTable(option, gradesURL, authentication, fields, i):
         if len(table) == 0:
             return None
 
-        return table[0]
+        return [courseName, table[0]]
     
-    return None
+    # response = requests.post(gradesURL, data=fields, auth=authentication)
+    # soup = BeautifulSoup(response.text, 'html.parser')
+
+    # # Find the table within the div
+    # table = soup.select('#ContentPlaceHolderright_ContentPlaceHoldercontent_nttTr table')
+
+    # if len(table) == 0:
+    #     return None
+
+    # return [courseName, table[0]]
+
+
 
 def fetchGrades(username, password):
     gradesURL = "https://apps.guc.edu.eg/student_ext/Grade/CheckGrade_01.aspx"
@@ -53,6 +64,9 @@ def fetchGrades(username, password):
             response = file.read()
 
         soup = BeautifulSoup(response, 'html.parser')
+    
+    # response = requests.get(gradesURL, auth=authentication)
+    # soup = BeautifulSoup(response.text, 'html.parser')
 
     fields = {
         "__EVENTTARGET": "",
@@ -81,17 +95,18 @@ def fetchGrades(username, password):
             for i, option in enumerate(options):
                 if i == 0:
                     continue
-                futures.append(executor.submit(fetchCourseTable, option, gradesURL, authentication, fields, i))
+                futures.append(executor.submit(fetchCourseTable, option, option.text.strip(),  gradesURL, authentication, fields, i))
             
             for future in concurrent.futures.as_completed(futures):
                 # You can handle any cleanup or result processing here if needed
-                table = future.result()
-                parseTable(table)
+                [courseName, table] = future.result()
+                parseTable(courseName, table)
                 progress.update(task, advance=1)
-                sleep(0.5)
+                sleep(0.1)
+            
                 
 
-def parseTable(table):
+def parseTable(courseName, table):
     if table is None:
         print("Table is None")
         return []
@@ -108,9 +123,12 @@ def parseTable(table):
     for element in datasets:
         grades = element[2].split()
         element[2] = ''.join(grades)
+        
+    
+    allGrades.append([courseName, datasets])
 
 
-    print(datasets)
+    # print(datasets)
     # print()
     # print("\n\n\n")
 
@@ -125,4 +143,7 @@ password = os.getenv("guc_password")
 
 fetchGrades(username, password)
 
+console.clear()
 console.log("Hi there!")
+console.log("Here are your grades:")
+console.log(allGrades)
