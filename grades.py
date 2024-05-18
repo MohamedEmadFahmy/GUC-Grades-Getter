@@ -208,7 +208,7 @@ def handle_key_press():
                     break
             
             update_table(selected_index)
-            time.sleep(0.1)
+            # time.sleep(0.1)
             
         time.sleep(0.1)
 
