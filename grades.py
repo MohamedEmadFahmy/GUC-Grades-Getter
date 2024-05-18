@@ -4,10 +4,14 @@ from requests_ntlm import HttpNtlmAuth
 from bs4 import BeautifulSoup
 import concurrent.futures
 from dotenv import load_dotenv
-from rich.console import Console
-from rich.progress import Progress
 from time import sleep
 
+from rich.console import Console
+from rich.progress import Progress
+from rich.table import Table
+
+import keyboard
+import time
 
 console = Console()
 
@@ -142,8 +146,70 @@ password = os.getenv("guc_password")
 # print("Elapsed time: {:.6f} seconds".format(elapsed_time))
 
 fetchGrades(username, password)
-
 console.clear()
-console.log("Hi there!")
-console.log("Here are your grades:")
-console.log(allGrades)
+# console.log("Hi there!")
+# console.log("Here are your grades:")
+# console.log(allGrades)
+
+
+
+
+# table = Table(title="Courses" ,box=None)
+
+# for course in allGrades:
+#     table.add_row(course[0], style="cyan")
+
+
+# console.print(table)
+
+# while True:
+#     3+3
+
+def update_table(selected_index):
+    table = Table(title="Courses", box=None)
+    for i, course in enumerate(allGrades):
+        if i == selected_index:
+            table.add_row(course[0], style="cyan")
+        else:
+            table.add_row(course[0])
+    console.clear()
+    console.print(table)
+    
+def print_grades(courseIndex):
+    console.clear()
+    table = Table(title=allGrades[courseIndex][0], box=None)
+    for grade in allGrades[courseIndex][1]:
+        table.add_row(grade[0], grade[1], grade[2], grade[3])
+    
+    if len(allGrades[courseIndex][1]) == 0:
+        table.add_row("No grades available for this course!")
+        
+    console.print(table)
+
+    
+    
+        
+
+def handle_key_press():
+    selected_index = 0
+    update_table(selected_index)
+    
+    while True:
+        if keyboard.is_pressed('up'):
+            selected_index = (selected_index - 1) % len(allGrades)
+            update_table(selected_index)
+        elif keyboard.is_pressed('down'):
+            selected_index = (selected_index + 1) % len(allGrades)
+            update_table(selected_index)
+        elif keyboard.is_pressed('enter'):
+            print_grades(selected_index)
+            while True:
+                if keyboard.is_pressed('backspace'):
+                    break
+            
+            update_table(selected_index)
+            time.sleep(0.1)
+            
+        time.sleep(0.1)
+
+handle_key_press()
