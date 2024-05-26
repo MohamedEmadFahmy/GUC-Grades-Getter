@@ -1,5 +1,5 @@
 import os
-# import requests
+import requests
 from requests_ntlm import HttpNtlmAuth
 from bs4 import BeautifulSoup
 import concurrent.futures
@@ -9,6 +9,9 @@ from time import sleep
 from rich.console import Console
 from rich.progress import Progress
 from rich.table import Table
+from rich.panel import Panel
+from rich.align import Align
+from rich.box import MINIMAL
 
 import keyboard
 import time
@@ -22,35 +25,35 @@ def fetchCourseTable(option,courseName, gradesURL, authentication, fields, i):
     option_value = option['value']
     fields['ctl00$ctl00$ContentPlaceHolderright$ContentPlaceHoldercontent$smCrsLst'] = option_value
 
-    # Construct the path to the HTML file
-    file_path = os.path.join(os.getcwd(), 'pages', f'gradepage{i}.html')
+    # # Construct the path to the HTML file
+    # file_path = os.path.join(os.getcwd(), 'pages', f'gradepage{i}.html')
 
-    # Check if the file exists
-    if os.path.exists(file_path):
-        # Open and read the file
-        with open(file_path, 'r', encoding='utf-8') as file:
-            response = file.read()
+    # # Check if the file exists
+    # if os.path.exists(file_path):
+    #     # Open and read the file
+    #     with open(file_path, 'r', encoding='utf-8') as file:
+    #         response = file.read()
 
-        soup = BeautifulSoup(response, 'html.parser')
+    #     soup = BeautifulSoup(response, 'html.parser')
 
-        # Find the table within the div
-        table = soup.select('#ContentPlaceHolderright_ContentPlaceHoldercontent_nttTr table')
+    #     # Find the table within the div
+    #     table = soup.select('#ContentPlaceHolderright_ContentPlaceHoldercontent_nttTr table')
 
-        if len(table) == 0:
-            return None
+    #     if len(table) == 0:
+    #         return None
 
-        return [courseName, table[0]]
+    #     return [courseName, table[0]]
     
-    # response = requests.post(gradesURL, data=fields, auth=authentication)
-    # soup = BeautifulSoup(response.text, 'html.parser')
+    response = requests.post(gradesURL, data=fields, auth=authentication)
+    soup = BeautifulSoup(response.text, 'html.parser')
 
-    # # Find the table within the div
-    # table = soup.select('#ContentPlaceHolderright_ContentPlaceHoldercontent_nttTr table')
+    # Find the table within the div
+    table = soup.select('#ContentPlaceHolderright_ContentPlaceHoldercontent_nttTr table')
 
-    # if len(table) == 0:
-    #     return None
+    if len(table) == 0:
+        return None
 
-    # return [courseName, table[0]]
+    return [courseName, table[0]]
 
 
 
@@ -59,18 +62,18 @@ def fetchGrades(username, password):
     dropDownListId = "ContentPlaceHolderright_ContentPlaceHoldercontent_smCrsLst"
     authentication = HttpNtlmAuth(username, password)
 
-    file_path = os.path.join(os.getcwd(), 'pages', 'gradepage1.html')
+    # file_path = os.path.join(os.getcwd(), 'pages', 'gradepage1.html')
 
-    # Check if the file exists
-    if os.path.exists(file_path):
-        # Open and read the file
-        with open(file_path, 'r', encoding='utf-8') as file:
-            response = file.read()
+    # # Check if the file exists
+    # if os.path.exists(file_path):
+    #     # Open and read the file
+    #     with open(file_path, 'r', encoding='utf-8') as file:
+    #         response = file.read()
 
-        soup = BeautifulSoup(response, 'html.parser')
+    #     soup = BeautifulSoup(response, 'html.parser')
     
-    # response = requests.get(gradesURL, auth=authentication)
-    # soup = BeautifulSoup(response.text, 'html.parser')
+    response = requests.get(gradesURL, auth=authentication)
+    soup = BeautifulSoup(response.text, 'html.parser')
 
     fields = {
         "__EVENTTARGET": "",
@@ -165,30 +168,55 @@ console.clear()
 # while True:
 #     3+3
 
+def create_panel(content):
+    # Get the console size
+    console_width = console.size.width
+    console_height = console.size.height
+
+    # Create a panel with the content and set its size to match the console
+    panel = Panel(
+        Align.center(content),
+        title=None,
+        box=MINIMAL,
+        width=console_width,
+        height=console_height,
+        style="bold",
+    )
+    
+    return panel
+
 def update_table(selected_index):
-    table = Table(title="Courses", box=None)
+    table = Table(title="Courses", box=MINIMAL)
     for i, course in enumerate(allGrades):
         if i == selected_index:
             table.add_row(course[0], style="cyan")
         else:
             table.add_row(course[0])
-    console.clear()
-    console.print(table)
-    
-def print_grades(courseIndex):
-    console.clear()
-    table = Table(title=allGrades[courseIndex][0], box=None)
-    for grade in allGrades[courseIndex][1]:
-        table.add_row(grade[0], grade[1], grade[2], grade[3])
-    
-    if len(allGrades[courseIndex][1]) == 0:
-        table.add_row("No grades available for this course!")
-        
-    console.print(table)
 
+    console.clear()
+    panel = create_panel(table)
+    console.print(panel)
+
+def print_grades(courseIndex):
+    course_name = allGrades[courseIndex][0]
+    grades = allGrades[courseIndex][1]
     
-    
-        
+    table = Table(title=course_name, box=MINIMAL)
+    if not grades:
+        table.add_column("", justify="center", style="red")
+        table.add_row("[bold]No grades available for this course![/bold]", style="on red")
+    else:
+        table.add_column("Assignment", justify="left", style="cyan")
+        table.add_column("Category", justify="center", style="magenta")
+        table.add_column("Grade", justify="center", style="green")
+        table.add_column("TA", justify="center", style="blue")
+
+        for grade in grades:
+            table.add_row(grade[0], grade[1], grade[2], grade[3])
+
+    console.clear()
+    panel = create_panel(table)
+    console.print(panel)
 
 def handle_key_press():
     selected_index = 0
@@ -198,18 +226,20 @@ def handle_key_press():
         if keyboard.is_pressed('up'):
             selected_index = (selected_index - 1) % len(allGrades)
             update_table(selected_index)
+            time.sleep(0.2)  # Add a small delay to prevent multiple triggers
         elif keyboard.is_pressed('down'):
             selected_index = (selected_index + 1) % len(allGrades)
             update_table(selected_index)
+            time.sleep(0.2)  # Add a small delay to prevent multiple triggers
         elif keyboard.is_pressed('enter'):
             print_grades(selected_index)
             while True:
                 if keyboard.is_pressed('backspace'):
                     break
-            
+                time.sleep(0.1)
             update_table(selected_index)
-            # time.sleep(0.1)
-            
+        elif keyboard.is_pressed('esc'):
+            break
         time.sleep(0.1)
 
 handle_key_press()
